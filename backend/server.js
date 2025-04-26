@@ -4,9 +4,37 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 const path = require('path');
-const users = []; // stockage temporaire des utilisateurs
+const fs = require('fs').promises;
 
+// Chemin vers le fichier JSON qui contiendra les utilisateurs
+const usersFilePath = path.join(__dirname, 'users.json');
+
+// Fonction pour charger les utilisateurs depuis le fichier
+async function loadUsers() {
+  try {
+    const data = await fs.readFile(usersFilePath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    // Si le fichier n'existe pas ou ne peut pas être lu, retourner un tableau vide
+    return [];
+  }
+}
+
+// Fonction pour sauvegarder les utilisateurs dans le fichier
+async function saveUsers(users) {
+  await fs.writeFile(usersFilePath, JSON.stringify(users, null, 2));
+}
+
+// Variable qui contiendra les utilisateurs
+let users = [];
+
+// Charger les utilisateurs au démarrage du serveur
+(async () => {
+  users = await loadUsers();
+  console.log(`${users.length} utilisateurs chargés depuis le fichier`);
+})();
 // Middleware
+
 app.use(cors());
 app.use(express.json());
 
@@ -17,14 +45,24 @@ app.get('/', (req, res) => {
 });
 
 // Route pour enregistrer un nouvel utilisateur
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
+  
+  // Vérifier si l'email existe déjà
+  if (users.some(user => user.email === email)) {
+    return res.status(400).json({ error: 'Cet email est déjà utilisé' });
+  }
+  
+  // Ajouter l'utilisateur au tableau
   users.push({ name, email, password });
+  
+  // Sauvegarder le tableau mis à jour dans le fichier
+  await saveUsers(users);
+  
   res.status(201).json({
     message: `Bienvenue ${name}, ton compte a été créé avec succès !`
   });
 });
-
 
 // 🔥 Route GET pour récupérer tous les utilisateurs
 app.get('/api/users', (req, res) => {
@@ -56,6 +94,17 @@ app.post('/api/index', (req, res) => {
 });
 
 
+
+
+// Ajouter cette route à votre server.js
+app.get('/api/view-users-file', async (req, res) => {
+  try {
+    const data = await fs.readFile(usersFilePath, 'utf8');
+    res.type('json').send(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la lecture du fichier' });
+  }
+});
 
 
 
