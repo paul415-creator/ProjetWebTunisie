@@ -1,0 +1,15 @@
+### Afficher tous les utilisateurs
+GET http://localhost:3000/api/users
+
+### Créer un utilisateur
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+  "name": "Paul",
+  "email": "Paul@mail.com",
+  "password": "123456"
+}
+//
+### Supprimer un utilisateur par son nom
+//DELETE http://localhost:3000/api/users/name/Alice

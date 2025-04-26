@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion</title>
+</head>
+<body>
+  <h2>Connexion</h2>
+  <form id="login-form">
+    <input type="email" name="email" placeholder="Email" required><br><br>
+    <input type="password" name="password" placeholder="Mot de passe" required><br><br>
+    <button type="submit">Se connecter</button>
+  </form>
+  
+  <p>Pas encore de compte ? <a href="register.html">S'inscrire</a></p>
+
+  <script>
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+          alert(result.message);
+          // Redirection possible ici après connexion réussie
+          // window.location.href = 'dashboard.html';
+        } else {
+          alert(result.error || 'Erreur de connexion');
+        }
+      } catch (error) {
+        alert('Erreur de connexion au serveur');
+        console.error('Erreur:', error);
+      }
+    });
+  </script>
+</body>
+</html>
