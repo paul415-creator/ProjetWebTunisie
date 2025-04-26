@@ -12,7 +12,7 @@
     <button type="submit">Se connecter</button>
   </form>
   
-  <p>Pas encore de compte ? <a href="register.html">S'inscrire</a></p>
+  <p>Pas  Inscris ? <a href="register.html">S'inscrire</a></p>
 
   <script>
     const form = document.getElementById('login-form');
@@ -23,7 +23,7 @@
       const data = Object.fromEntries(formData.entries());
 
       try {
-        const response = await fetch('http://localhost:3000/api/index', {
+        const response = await fetch('http://localhost:3000/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)

@@ -13,6 +13,8 @@
     <button type="submit">S'inscrire</button>
   </form>
 
+  <p>Deja Inscris   ? <a href="login.html">Se connecter</a></p>
+
   <script>
     const form = document.getElementById('register-form');
     form.addEventListener('submit', async (e) => {
@@ -32,7 +34,7 @@
 
       // redirection vers index.html
       if (response.ok) {
-          window.location.href = 'index.html';
+          window.location.href = 'login.html';
         }
 
             

@@ -1,6 +1,5 @@
 // backend/server.js
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const port = 3000;
 const path = require('path');
@@ -33,20 +32,14 @@ let users = [];
   users = await loadUsers();
   console.log(`${users.length} utilisateurs chargés depuis le fichier`);
 })();
-
-
-
-
-
 // Middleware
 
-app.use(cors());
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../fronted')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../fronted', 'index.html'));
+  res.sendFile(path.join(__dirname, '../fronted', 'Accueil.html'));
 });
 
 // Route pour enregistrer un nouvel utilisateur
