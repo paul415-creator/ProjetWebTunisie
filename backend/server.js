@@ -31,6 +31,34 @@ app.get('/api/users', (req, res) => {
   res.json(users);
 });
 
+
+
+// Ajouter cette route à votre fichier server.js
+app.post('/api/index', (req, res) => {
+  const { email, password } = req.body;
+  
+  // Rechercher l'utilisateur par email
+  const user = users.find(user => user.email === email);
+  
+  // Vérifier si l'utilisateur existe et si le mot de passe correspond
+  if (!user) {
+    return res.status(401).json({ error: 'Email non trouvé' });
+  }
+  
+  if (user.password !== password) {
+    return res.status(401).json({ error: 'Mot de passe incorrect' });
+  }
+  
+  // Si tout est bon, renvoyer un message de succès
+  res.status(200).json({ 
+    message: `Bienvenue ${user.name} ! Connexion réussie.` 
+  });
+});
+
+
+
+
+
 /*
 app.delete('/api/users/name/:name', async (req, res) => {
     const { name } = req.params;
