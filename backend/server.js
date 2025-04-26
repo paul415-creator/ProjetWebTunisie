@@ -33,6 +33,11 @@ let users = [];
   users = await loadUsers();
   console.log(`${users.length} utilisateurs chargés depuis le fichier`);
 })();
+
+
+
+
+
 // Middleware
 
 app.use(cors());

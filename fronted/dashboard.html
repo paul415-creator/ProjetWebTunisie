@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord</title>
+</head>
+<body>
+    <h1>Tableau de bord</h1>
+    
+    <div>
+        <h2>Bienvenue, <span id="user-name">Utilisateur</span> !</h2>
+        <p>Vous êtes connecté</p>
+    </div>
+    
+    <div>
+        <h3>Vos informations</h3>
+        <p><strong>Nom:</strong> <span id="display-name">-</span></p>
+        <p><strong>Email:</strong> <span id="display-email">-</span></p>
+    </div>
+
+    <script>
+        // Récupérer les informations de l'utilisateur connecté
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        // Afficher les informations de l'utilisateur
+        document.getElementById('user-name').textContent = currentUser.name || 'Utilisateur';
+        document.getElementById('display-name').textContent = currentUser.name || '-';
+        document.getElementById('display-email').textContent = currentUser.email || '-';
+    </script>
+</body>
+</html>
