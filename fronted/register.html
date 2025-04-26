@@ -29,6 +29,13 @@
 
       const result = await response.json();
       alert(result.message);
+
+      // redirection vers index.html
+      if (response.ok) {
+          window.location.href = 'index.html';
+        }
+
+            
     });
   </script>
 </body>
