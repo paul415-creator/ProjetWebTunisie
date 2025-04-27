@@ -1,46 +1,21 @@
 // backend/server.js
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 3000;
-const path = require('path');
-const fs = require('fs').promises;
+const users = [];
 
-// Chemin vers le fichier JSON qui contiendra les utilisateurs
-const usersFilePath = path.join(__dirname, 'users.json');
 
-// Fonction pour charger les utilisateurs depuis le fichier
-async function loadUsers() {
-  try {
-    const data = await fs.readFile(usersFilePath, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    // Si le fichier n'existe pas ou ne peut pas être lu, retourner un tableau vide
-    return [];
-  }
-}
 
-// Fonction pour sauvegarder les utilisateurs dans le fichier
-async function saveUsers(users) {
-  await fs.writeFile(usersFilePath, JSON.stringify(users, null, 2));
-}
-
-// Variable qui contiendra les utilisateurs
-let users = [];
-
-// Charger les utilisateurs au démarrage du serveur
-(async () => {
-  users = await loadUsers();
-  console.log(`${users.length} utilisateurs chargés depuis le fichier`);
-})();
 // Middleware
-
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, '../fronted')));
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../fronted', 'Accueil.html'));
 });
+
+
+
 
 // Route pour enregistrer un nouvel utilisateur
 app.post('/api/register', async (req, res) => {
@@ -52,25 +27,23 @@ app.post('/api/register', async (req, res) => {
   }
   
   // Ajouter l'utilisateur au tableau
-  users.push({ name, email, password });
-  
-  // Sauvegarder le tableau mis à jour dans le fichier
-  await saveUsers(users);
+  users.push({ name, email, password });  
   
   res.status(201).json({
     message: `Bienvenue ${name}, ton compte a été créé avec succès !`
   });
 });
 
-// 🔥 Route GET pour récupérer tous les utilisateurs
+
+
+// Route GET pour récupérer tous les utilisateurs
 app.get('/api/users', (req, res) => {
   res.json(users);
 });
 
 
-
-// Ajouter cette route à votre fichier server.js
-app.post('/api/index', (req, res) => {
+// Route pour la connexion
+app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
   
   // Rechercher l'utilisateur par email
@@ -91,39 +64,6 @@ app.post('/api/index', (req, res) => {
   });
 });
 
-
-
-
-// Ajouter cette route à votre server.js
-app.get('/api/view-users-file', async (req, res) => {
-  try {
-    const data = await fs.readFile(usersFilePath, 'utf8');
-    res.type('json').send(data);
-  } catch (error) {
-    res.status(500).json({ error: 'Erreur lors de la lecture du fichier' });
-  }
-});
-
-
-
-/*
-app.delete('/api/users/name/:name', async (req, res) => {
-    const { name } = req.params;
-  
-    try {
-      const deletedUser = await User.findOneAndDelete({ name });
-  
-      if (!deletedUser) {
-        return res.status(404).json({ error: 'Utilisateur non trouvé' });
-      }
-  
-      res.json({ message: `Utilisateur ${deletedUser.name} supprimé.` });
-    } catch (err) {
-      res.status(500).json({ error: 'Erreur lors de la suppression' });
-    }
-  });
-  
-*/
 
 app.listen(port, () => {
   console.log(`Serveur backend démarré sur http://localhost:${port}`);
