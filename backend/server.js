@@ -1,11 +1,15 @@
 // backend/server.js
 const express = require('express');
 const path = require('path');
+const dotenv = require('dotenv');
+const connectDB = require('./config/database');
+dotenv.config();
+connectDB();
 const app = express();
-const port = 3000;
+// Utiliser la variable d'environnement pour le port ou 3000 par défaut
+const port = process.env.PORT || 3000;
 
-// Tableau global des utilisateurs (à remplacer par une base de données plus tard)
-global.users = [];
+
 
 // Importer les routes
 const authRoutes = require('./routes/auth');
@@ -23,6 +27,14 @@ app.get('/', (req, res) => {
 // Monter les routes API
 app.use('/api/auth', authRoutes);  // Toutes les routes d'auth commenceront par /api/auth
 app.use('/api/users', userRoutes); // Toutes les routes d'utilisateurs commenceront par /api/users
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: 'error',
+    message: 'Une erreur est survenue sur le serveur'
+  });
+});
 
 app.listen(port, () => {
   console.log(`Serveur backend démarré sur http://localhost:${port}`);

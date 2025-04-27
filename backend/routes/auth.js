@@ -1,43 +1,63 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/user');
 
-// Route pour enregistrer un nouvel utilisateur
-router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
-    
-    // Vérifier si l'email existe déjà
-    if (global.users.some(user => user.email === email)) {
-      return res.status(400).json({ error: 'Cet email est déjà utilisé' });
+
+
+router.post('/register', async (req, res, next) => {
+    try {
+        const { name, email, password } = req.body;
+        
+        // Vérifier si l'email existe déjà en utilisant le modèle Mongoose
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ 
+                message: 'Cet email est déjà utilisé' 
+            });
+        }
+        
+        // Créer un nouvel utilisateur avec Mongoose
+        const newUser = await User.create({
+            name,
+            email,
+            password // Le hachage est géré par le middleware pre-save
+        });
+        
+        res.status(201).json({
+            message: `Bienvenue ${name}, ton compte a été créé avec succès !`
+        });
+    } catch (error) {
+        console.error('Erreur lors de l\'inscription:', error);
+        next(error);
     }
-    
-    // Ajouter l'utilisateur au tableau
-    global.users.push({ name, email, password });  
-    
-    res.status(201).json({
-      message: `Bienvenue ${name}, ton compte a été créé avec succès !`
-    });
 });
   
-// Route pour la connexion
-router.post('/login', (req, res) => {
-    const { email, password } = req.body;
-    
-    // Rechercher l'utilisateur par email
-    const user = global.users.find(user => user.email === email);
-    
-    // Vérifier si l'utilisateur existe et si le mot de passe correspond
-    if (!user) {
-      return res.status(401).json({ error: 'Email non trouvé' });
+router.post('/login', async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        
+        // Rechercher l'utilisateur par email et inclure le mot de passe pour la comparaison
+        const user = await User.findOne({ email }).select('+password');
+        
+        // Vérifier si l'utilisateur existe
+        if (!user) {
+            return res.status(401).json({ message: 'Email non trouvé' });
+        }
+        
+        // Vérifier si le mot de passe correspond
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Mot de passe incorrect' });
+        }
+        
+        // Si tout est bon, renvoyer un message de succès
+        res.status(200).json({ 
+            message: `Bienvenue ${user.name} ! Connexion réussie.` 
+        });
+    } catch (error) {
+        console.error('Erreur lors de la connexion:', error);
+        next(error);
     }
-    
-    if (user.password !== password) {
-      return res.status(401).json({ error: 'Mot de passe incorrect' });
-    }
-    
-    // Si tout est bon, renvoyer un message de succès
-    res.status(200).json({ 
-      message: `Bienvenue ${user.name} ! Connexion réussie.` 
-    });
 });
 
 module.exports = router;
