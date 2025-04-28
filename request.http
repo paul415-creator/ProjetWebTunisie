@@ -13,3 +13,16 @@ Content-Type: application/json
 //
 ### Supprimer un utilisateur par son nom
 //DELETE http://localhost:3000/api/users/name/Alice
+
+
+POST http://localhost:3000/api/cars
+Content-Type: application/json
+
+{
+  "marque": "Renault",
+  "modele": "Clio",
+  "annee": 2022,
+  "prix": 15000,
+  "disponible": true,
+  "description": "Belle Renault Clio en excellent état"
+}

@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 // Importer les routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const carRoutes = require('./routes/vehicules'); // Nouvelle importation
+const carRoutes = require('./routes/vehicules'); // Nouvelle importation pour les voitures 
 
 
 // Middleware
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 // Monter les routes API
 app.use('/api/auth', authRoutes);  // Toutes les routes d'auth commenceront par /api/auth
 app.use('/api/users', userRoutes); // Toutes les routes d'utilisateurs commenceront par /api/users
-app.use('/api/cars', carRoutes); // Nouvelle route
+app.use('/api/cars', carRoutes); // Nouvelle route pour les voitures 
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
