@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voitures Disponibles</title>
+</head>
+<body>
+  <header>
+    <h1>Voitures Disponibles</h1>
+    <nav>
+      <a href="Accueil.html">Accueil</a> |
+      <span id="auth-links">
+        <a href="login.html">Se connecter</a> |
+        <a href="register.html">S'inscrire</a>
+      </span>
+      <span id="user-links" style="display: none;">
+        <span id="username-display"></span> |
+        <a href="dashboard.html">Tableau de bord</a> |
+        <a href="#" id="logout-link">Déconnexion</a>
+      </span>
+    </nav>
+  </header>
+  
+  <main>
+    <div id="loading-message">Chargement des voitures...</div>
+    <div id="car-list"></div>
+  </main>
+
+  <script>
+    // Vérifier si l'utilisateur est connecté
+    function checkAuthentication() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const isLoggedIn = token && user;
+      
+      document.getElementById('auth-links').style.display = isLoggedIn ? 'none' : 'inline';
+      document.getElementById('user-links').style.display = isLoggedIn ? 'inline' : 'none';
+      
+      if (isLoggedIn && user.name) {
+        document.getElementById('username-display').textContent = `Bonjour, ${user.name}`;
+      }
+    }
+    
+    // Déconnexion
+    document.getElementById('logout-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.reload();
+    });
+
+    // Fonction pour charger les voitures disponibles
+    async function loadAvailableCars() {
+      const loadingMessage = document.getElementById('loading-message');
+      const carListElement = document.getElementById('car-list');
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/cars/available');
+        
+        if (!response.ok) {
+          throw new Error('Erreur lors du chargement des voitures');
+        }
+        
+        const cars = await response.json();
+        
+        if (cars.length === 0) {
+          loadingMessage.textContent = 'Aucune voiture disponible actuellement.';
+          return;
+        }
+        
+        // Masquer le message de chargement
+        loadingMessage.style.display = 'none';
+        
+        // Afficher chaque voiture
+        cars.forEach(car => {
+          const carElement = document.createElement('div');
+          
+          carElement.innerHTML = `
+            <h3>${car.marque} ${car.modele} (${car.annee})</h3>
+            <p><strong>Prix:</strong> ${car.prix} €</p>
+            <p>${car.description || 'Aucune description disponible.'}</p>
+            <button onclick="viewCarDetails('${car._id}')">Voir détails</button>
+            <hr>
+          `;
+          
+          carListElement.appendChild(carElement);
+        });
+      } catch (error) {
+        console.error('Erreur:', error);
+        loadingMessage.textContent = 'Erreur lors du chargement des voitures. Veuillez réessayer plus tard.';
+      }
+    }
+    
+    // Fonction pour voir les détails d'une voiture
+    function viewCarDetails(carId) {
+      window.location.href = `voiture-details.html?id=${carId}`;
+    }
+    
+    // Charger les voitures au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuthentication();
+      loadAvailableCars();
+    });
+  </script>
+</body>
+</html>
