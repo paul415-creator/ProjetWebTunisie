@@ -14,6 +14,9 @@ Content-Type: application/json
 ### Supprimer un utilisateur par son nom
 //DELETE http://localhost:3000/api/users/name/Alice
 
+### Afficher tous les voitures
+GET http://localhost:3000/api/cars/available
+
 
 POST http://localhost:3000/api/cars
 Content-Type: application/json
