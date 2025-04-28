@@ -12,7 +12,7 @@
     <button type="submit">Se connecter</button>
   </form>
   
-  <p>Pas  Inscris ? <a href="register.html">S'inscrire</a></p>
+  <p>Pas Inscris ? <a href="register.html">S'inscrire</a></p>
 
   <script>
     const form = document.getElementById('login-form');
@@ -32,8 +32,21 @@
         const result = await response.json();
         
         if (response.ok) {
+          // Stocker le token dans le localStorage Vérifie si result.token existe dans la réponse du serveur
+          // Si oui, stocke ce token dans le localStorage
+
+          if (result.token) {
+            localStorage.setItem('token', result.token);
+            console.log('Token stocké avec succès:', result.token.substring(0, 20) + '...');
+            
+            // Stocker les données utilisateur si nécessaire
+            if (result.user) {
+              localStorage.setItem('user', JSON.stringify(result.user));
+            }
+          }
+          
           alert(result.message);
-          // Redirection possible ici après connexion réussie
+          // Redirection après connexion réussie
           window.location.href = 'dashboard.html';
         } else {
           alert(result.error || 'Erreur de connexion');
