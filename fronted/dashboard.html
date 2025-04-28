@@ -10,10 +10,12 @@
     
     <div>
         <h2>Bienvenue, <span id="user-name">Utilisateur</span> !</h2>
-        <p>Vous êtes connecté</p>
+        
     </div>
     
-    <div>
+    <button id="toggle-info">Vos informations</button>
+    
+    <div id="info-container" style="display: none;">
         <h3>Vos informations</h3>
         <p><strong>Nom:</strong> <span id="display-name">-</span></p>
         <p><strong>Email:</strong> <span id="display-email">-</span></p>
@@ -22,13 +24,22 @@
     <script>
         // Récupérer les informations de l'utilisateur connecté
         const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-        //stocké les informations sur "user"
-        // stocker ces informations sous cette clé ("user") dans votre page de connexion.
-                
+        
         // Afficher les informations de l'utilisateur
         document.getElementById('user-name').textContent = currentUser.name || 'Utilisateur';
         document.getElementById('display-name').textContent = currentUser.name || '-';
         document.getElementById('display-email').textContent = currentUser.email || '-';
+        
+        // Fonctionnalité du bouton
+        document.getElementById('toggle-info').addEventListener('click', function() {
+            const infoContainer = document.getElementById('info-container');
+            
+            if (infoContainer.style.display === 'block') {
+                infoContainer.style.display = 'none';
+            } else {
+                infoContainer.style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
