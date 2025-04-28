@@ -21,8 +21,10 @@
 
     <script>
         // Récupérer les informations de l'utilisateur connecté
-        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        
+        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+        //stocké les informations sur "user"
+        // stocker ces informations sous cette clé ("user") dans votre page de connexion.
+                
         // Afficher les informations de l'utilisateur
         document.getElementById('user-name').textContent = currentUser.name || 'Utilisateur';
         document.getElementById('display-name').textContent = currentUser.name || '-';
