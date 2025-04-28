@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const { generateToken } = require('../utils/jwt');
 
 
 
@@ -22,7 +23,10 @@ router.post('/register', async (req, res, next) => {
             email,
             password // Le hachage est géré par le middleware pre-save
         });
-        
+
+
+    
+
         res.status(201).json({
             message: `Bienvenue ${name}, ton compte a été créé avec succès !`
         });
@@ -31,7 +35,11 @@ router.post('/register', async (req, res, next) => {
         next(error);
     }
 });
+
+
+
   
+////////////////////////////////////////////////////////////////////////////////////////////////:
 router.post('/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -50,14 +58,24 @@ router.post('/login', async (req, res, next) => {
             return res.status(401).json({ message: 'Mot de passe incorrect' });
         }
         
-        // Si tout est bon, renvoyer un message de succès
+        // Générer un token avec notre fonction importée
+        const token = generateToken(user._id);
+        console.log("Token généré:", token.substring(0, 20) + "...");
+    
+        // Ne pas envoyer le mot de passe dans la réponse
+        user.password = undefined;
+
+        // Si tout est bon, renvoyer un message de succès avec le token
         res.status(200).json({ 
-            message: `Bienvenue ${user.name} ! Connexion réussie.` 
+            message: `Bienvenue ${user.name} ! Connexion réussie.`,
+            token,
+            user
         });
     } catch (error) {
-        console.error('Erreur lors de la connexion:', error);
-        next(error);
+        console.error("Erreur lors de la connexion:", error);
+        res.status(500).json({ error: 'Erreur serveur lors de la connexion' });
     }
 });
 
+// Exportez le router
 module.exports = router;
