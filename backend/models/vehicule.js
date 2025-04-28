@@ -1,46 +1,33 @@
-// backend/models/Vehicle.js
+// backend/models/Car.js
 const mongoose = require('mongoose');
 
-const vehicleSchema = new mongoose.Schema({
-  make: {
+const CarSchema = new mongoose.Schema({
+  marque: {
     type: String,
-    required: [true, 'La marque du véhicule est requise']
+    required: true,
+    trim: true
   },
-  model: {
+  modele: {
     type: String,
-    required: [true, 'Le modèle du véhicule est requis']
+    required: true,
+    trim: true
   },
-  year: {
+  annee: {
     type: Number,
-    required: [true, "L'année du véhicule est requise"]
+    required: true
   },
-  type: {
-    type: String,
-    required: [true, 'Le type de véhicule est requis'],
-    enum: ['Compacte', 'SUV', 'Berline', 'Berline premium', 'Cabriolet', 'Utilitaire']
-  },
-  fuel: {
-    type: String,
-    required: [true, 'Le type de carburant est requis'],
-    enum: ['Essence', 'Diesel', 'Electrique', 'Hybride']
-  },
-  pricePerDay: {
+  prix: {
     type: Number,
-    required: [true, 'Le prix par jour est requis']
+    required: true
   },
-  available: {
+  disponible: {
     type: Boolean,
     default: true
   },
   description: {
-    type: String
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    type: String,
+    trim: true
   }
 });
 
-const Vehicle = mongoose.model('Vehicle', vehicleSchema);
-
-module.exports = Vehicle;
+module.exports = mongoose.model('Car', CarSchema);
