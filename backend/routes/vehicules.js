@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const Vehicule = require('../models/vehicule');  // et non '../models/Vehicule'
+const mongoose = require('mongoose'); // J'importe 
+
 
 // Pour l'importation du middleware d'authentification
 
@@ -11,7 +13,7 @@ const Vehicule = require('../models/vehicule');  // et non '../models/Vehicule'
 // Route pour obtenir toutes les voitures disponibles
 router.get('/available', async (req, res) => {
   try {
-    const cars = await Vehicule .find({ disponible: true });
+    const cars = await Vehicule.find({ disponible: false });
     res.json(cars);
   } catch (error) {
     console.error('Erreur lors de la récupération des voitures:', error);
@@ -28,7 +30,7 @@ router.get('/available', async (req, res) => {
 // Route pour obtenir les détails d'une voiture spécifique
 router.get('/:id', async (req, res) => {
     try {
-      const car = await Car.findById(req.params.id);
+      const car = await Vehicule.findById(req.params.id);
       
       if (!car) {
         return res.status(404).json({ error: 'Voiture non trouvée' });
@@ -57,6 +59,50 @@ router.post('/', async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   });
+// Dans backend/routes/vehicules.js ou backend/routes/car.js
+
+
+//Les routes les plus spécifiques doivent toujours venir
+//  avant les routes plus génériques avec des paramètres :
+
+// soit /test d'abord et après /:id
+
+
+
+router.delete('/test', (req, res) => {
+    res.json({ message: 'Route DELETE fonctionne!' });
+  });
+
+// Dans backend/routes/vehicules.js ou backend/routes/car.js
+
+router.delete('/:id', async (req, res) => {
+    try {
+      const id = req.params.id;
+      
+      // Vérifier si l'ID est valide
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'ID de véhicule invalide' });
+        //j'avais une erreur avec cette ligne car je n'aportais pas mongoose 
+      }
+      
+      // Rechercher et supprimer le véhicule
+      const deletedVehicule = await Vehicule.findByIdAndDelete(id);
+      
+      // Si aucun véhicule n'est trouvé avec cet ID
+      if (!deletedVehicule) {
+        return res.status(404).json({ error: 'Véhicule non trouvé' });
+      }
+      
+      // Retourner une confirmation de suppression
+      res.json({ message: 'Véhicule supprimé avec succès', vehicule: deletedVehicule });
+      
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      res.status(500).json({ error: 'Erreur serveur' });
+    }
+  });
+
+
 
 
 module.exports = router;

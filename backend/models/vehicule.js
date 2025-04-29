@@ -46,6 +46,7 @@ const vehiculeSchema = new mongoose.Schema({
 
 // Le troisième paramètre 'voitures' spécifie que les données seront stockées 
 // dans la collection 'voitures' de MongoDB
-const Vehicule = mongoose.model('Vehicule', vehiculeSchema, 'voitures');
+const Vehicule = mongoose.model('Vehicule', vehiculeSchema);
+
 
 module.exports = Vehicule;
