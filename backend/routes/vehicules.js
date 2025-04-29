@@ -1,12 +1,17 @@
 // backend/routes/car.js
 const express = require('express');
 const router = express.Router();
-const Car = require('../models/vehicule');
+const Vehicule = require('../models/vehicule');  // et non '../models/Vehicule'
+
+// Pour l'importation du middleware d'authentification
+
+//const auth = require('../middleware/auth'); 
+
 
 // Route pour obtenir toutes les voitures disponibles
 router.get('/available', async (req, res) => {
   try {
-    const cars = await Car.find({ disponible: true });
+    const cars = await Vehicule .find({ disponible: true });
     res.json(cars);
   } catch (error) {
     console.error('Erreur lors de la récupération des voitures:', error);
@@ -38,23 +43,20 @@ router.get('/:id', async (req, res) => {
 
 
 
-  // Route pour ajouter une nouvelle voiture
-// Si vous utilisez l'authentification, remplacez router.post('/', async...) par router.post('/', auth, async...)
+
+// Route pour ajouter un nouveau véhicule (temporairement sans authentification)
+// RETIRÉ LE MIDDLEWARE auth POUR LE TEST
 router.post('/', async (req, res) => {
     try {
-      const newCar = new Car(req.body);
-      const savedCar = await newCar.save();
+      const newVehicule = new Vehicule(req.body);
+      const savedVehicule = await newVehicule.save();
       
-      res.status(201).json(savedCar);
+      res.status(201).json(savedVehicule);
     } catch (error) {
-      console.error('Erreur lors de l\'ajout d\'une voiture:', error);
+      console.error('Erreur lors de l\'ajout d\'un véhicule:', error);
       res.status(400).json({ error: error.message });
     }
-
-
-});
-
-
+  });
 
 
 module.exports = router;

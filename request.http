@@ -24,11 +24,12 @@ GET http://localhost:3000/api/cars/available
 POST http://localhost:3000/api/cars
 Content-Type: application/json
 
+
 {
-    "marque": "Audi",
-    "modele": "A3",
-    "annee": 2021,
-    "prix": 26500,
+    "marque": "Mercedes",
+    "modele": "Classe C",
+    "annee": 2023,
+    "prix": 42900,
     "disponible": true,
-    "description": "Audi A3 Sportback avec intérieur cuir"
+    "description": "Mercedes Classe C avec pack AMG et toit panoramique"
 }
