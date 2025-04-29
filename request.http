@@ -26,12 +26,12 @@ POST http://localhost:3000/api/cars
 Content-Type: application/json
 
 {
-    "marque": "Mercedes",
-    "modele": "Classe C",
-    "annee": 2023,
-    "prix": 42900,
+    "marque": "BMW",
+    "modele": "A3",
+    "annee": 2021,
+    "prix": 26500,
     "disponible": false,
-    "description": "Mercedes Classe C avec pack AMG et toit panoramique"
+    "description": "Audi A3 Sportback avec intérieur cuir"
 }
 
 ###supprimer une voitures avec l'id 

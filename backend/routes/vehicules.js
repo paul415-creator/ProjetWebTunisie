@@ -13,7 +13,7 @@ const mongoose = require('mongoose'); // J'importe
 // Route pour obtenir toutes les voitures disponibles
 router.get('/available', async (req, res) => {
   try {
-    const cars = await Vehicule.find({ disponible: false });
+    const cars = await Vehicule.find({ disponible: true });
     res.json(cars);
   } catch (error) {
     console.error('Erreur lors de la récupération des voitures:', error);
