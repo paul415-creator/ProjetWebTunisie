@@ -80,7 +80,7 @@
             <h3>${car.marque} ${car.modele} (${car.annee})</h3>
             <p><strong>Prix:</strong> ${car.prix} €</p>
             <p>${car.description || 'Aucune description disponible.'}</p>
-            <button onclick="viewCarDetails('${car._id}')">Voir détails</button>
+            <button onclick="viewCarDetails('${car._id}')">Reserver</button>
             <hr>
           `;
           
@@ -94,7 +94,7 @@
     
     // Fonction pour voir les détails d'une voiture
     function viewCarDetails(carId) {
-      window.location.href = `voiture-details.html?id=${carId}`;
+      window.location.href = `reservecar.html?id=${carId}`;
     }
     
     // Charger les voitures au chargement de la page
