@@ -26,6 +26,16 @@
     <div id="loading-message">Chargement des voitures...</div>
     <div id="car-list"></div>
   </main>
+  
+  <!-- Popup de confirmation de connexion -->
+  <div id="login-popup" style="display: none;">
+    <h3>Connexion requise</h3>
+    <p>Vous devez être connecté pour réserver une voiture.</p>
+    <div>
+      <button id="login-redirect">Se connecter</button>
+      <button id="close-popup">Annuler</button>
+    </div>
+  </div>
 
   <script>
     // Vérifier si l'utilisateur est connecté
@@ -40,6 +50,8 @@
       if (isLoggedIn && user.name) {
         document.getElementById('username-display').textContent = `Bonjour, ${user.name}`;
       }
+      
+      return isLoggedIn;
     }
     
     // Déconnexion
@@ -49,6 +61,23 @@
       localStorage.removeItem('user');
       window.location.reload();
     });
+
+    // Fonction pour afficher le popup de connexion
+    function showLoginPopup() {
+      document.getElementById('login-popup').style.display = 'block';
+    }
+    
+    // Fonction pour fermer le popup
+    function closeLoginPopup() {
+      document.getElementById('login-popup').style.display = 'none';
+    }
+    
+    // Événements pour le popup
+    document.getElementById('login-redirect').addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+    
+    document.getElementById('close-popup').addEventListener('click', closeLoginPopup);
 
     // Fonction pour charger les voitures disponibles
     async function loadAvailableCars() {
@@ -80,11 +109,19 @@
             <h3>${car.marque} ${car.modele} (${car.annee})</h3>
             <p><strong>Prix:</strong> ${car.prix} €</p>
             <p>${car.description || 'Aucune description disponible.'}</p>
-            <button onclick="viewCarDetails('${car._id}')">Reserver</button>
+            <button class="reserve-button" data-car-id="${car._id}">Reserver</button>
             <hr>
           `;
           
           carListElement.appendChild(carElement);
+        });
+        
+        // Ajouter les événements de réservation
+        document.querySelectorAll('.reserve-button').forEach(button => {
+          button.addEventListener('click', function() {
+            const carId = this.getAttribute('data-car-id');
+            handleReservation(carId);
+          });
         });
       } catch (error) {
         console.error('Erreur:', error);
@@ -92,9 +129,15 @@
       }
     }
     
-    // Fonction pour voir les détails d'une voiture
-    function viewCarDetails(carId) {
-      window.location.href = `reservecar.html?id=${carId}`;
+    // Fonction pour gérer la réservation avec vérification de connexion
+    function handleReservation(carId) {
+      if (checkAuthentication()) {
+        // L'utilisateur est connecté, rediriger vers la page de réservation
+        window.location.href = `reservecar.html?id=${carId}`;
+      } else {
+        // L'utilisateur n'est pas connecté, afficher le popup
+        showLoginPopup();
+      }
     }
     
     // Charger les voitures au chargement de la page
@@ -105,3 +148,4 @@
   </script>
 </body>
 </html>
+
