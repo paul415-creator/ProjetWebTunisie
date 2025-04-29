@@ -19,6 +19,7 @@
         <h3>Vos informations</h3>
         <p><strong>Nom:</strong> <span id="display-name">-</span></p>
         <p><strong>Email:</strong> <span id="display-email">-</span></p>
+        <button id="redirect-voitures">Voir les voitures</button>
     </div>
 
     <script>
@@ -30,7 +31,7 @@
         document.getElementById('display-name').textContent = currentUser.name || '-';
         document.getElementById('display-email').textContent = currentUser.email || '-';
         
-        // Fonctionnalité du bouton
+        // Fonctionnalité du bouton d'affichage des informations
         document.getElementById('toggle-info').addEventListener('click', function() {
             const infoContainer = document.getElementById('info-container');
             
@@ -39,6 +40,11 @@
             } else {
                 infoContainer.style.display = 'block';
             }
+        });
+        
+        // Fonctionnalité du bouton de redirection vers voitures.html
+        document.getElementById('redirect-voitures').addEventListener('click', function() {
+            window.location.href = 'voitures.html';
         });
     </script>
 </body>
