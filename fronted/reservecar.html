@@ -84,6 +84,8 @@
     function getCarIdFromUrl() {
       const urlParams = new URLSearchParams(window.location.search);
       const carId = urlParams.get('id');
+      // AJOUT: Console.log pour vérifier l'ID extrait
+      console.log("ID de la voiture extrait de l'URL:", carId);
       return carId;
     }
     
@@ -102,36 +104,66 @@
       }
       
       try {
-        const response = await fetch(`http://localhost:3000/api/cars/${carId}`);
+        // AJOUT: Stocker l'URL dans une variable pour le débogage
+        const apiUrl = `http://localhost:3000/api/cars/${carId}`;
+        // AJOUT: Afficher l'URL complète pour vérification
+        console.log("URL de l'API appelée:", apiUrl);
+        
+        // MODIFICATION: Utilisation de la variable apiUrl au lieu de l'URL directement
+        const response = await fetch(apiUrl);
+        
+        // AJOUT: Afficher le statut de la réponse et le type de contenu
+        console.log("Status de la réponse:", response.status);
+        console.log("Content-Type:", response.headers.get('content-type'));
         
         if (!response.ok) {
           throw new Error('Erreur lors du chargement des détails de la voiture');
         }
         
-        const car = await response.json();
+        // MODIFICATION: Au lieu d'utiliser response.json() directement, nous récupérons 
+        // d'abord le texte puis le convertissons en JSON pour pouvoir déboguer
+        const responseText = await response.text();
+        // AJOUT: Afficher le début de la réponse pour voir ce qu'elle contient
+        console.log("Premiers 100 caractères de la réponse:", responseText.substring(0, 100));
         
-        // Masquer le message de chargement
-        loadingMessage.style.display = 'none';
-        
-        // Afficher les détails de la voiture
-        carDetailsElement.innerHTML = `
-          <h2>${car.marque} ${car.modele} (${car.annee})</h2>
-          <p><strong>Prix:</strong> ${car.prix} €</p>
-          <p><strong>Description:</strong> ${car.description || 'Aucune description disponible.'}</p>
-          <p><strong>Caractéristiques:</strong></p>
-          <ul>
-            ${car.couleur ? `<li>Couleur: ${car.couleur}</li>` : ''}
-            ${car.kilometrage ? `<li>Kilométrage: ${car.kilometrage} km</li>` : ''}
-            ${car.carburant ? `<li>Carburant: ${car.carburant}</li>` : ''}
-            ${car.transmission ? `<li>Transmission: ${car.transmission}</li>` : ''}
-          </ul>
-        `;
-        
-        carDetailsElement.style.display = 'block';
-        document.getElementById('reservation-form').style.display = 'block';
+        try {
+          // AJOUT: Bloc try/catch pour capturer spécifiquement les erreurs de parsing JSON
+          // MODIFICATION: Utiliser JSON.parse au lieu de response.json()
+          const car = JSON.parse(responseText);
+          // AJOUT: Vérifier l'objet voiture après parsing
+          console.log("Objet voiture après parsing:", car);
+          
+          // Masquer le message de chargement
+          loadingMessage.style.display = 'none';
+          
+          // Afficher les détails de la voiture
+          carDetailsElement.innerHTML = `
+            <h2>${car.marque} ${car.modele} (${car.annee})</h2>
+            <p><strong>Prix:</strong> ${car.prix} €</p>
+            <p><strong>Description:</strong> ${car.description || 'Aucune description disponible.'}</p>
+            <p><strong>Caractéristiques:</strong></p>
+            <ul>
+              ${car.couleur ? `<li>Couleur: ${car.couleur}</li>` : ''}
+              ${car.kilometrage ? `<li>Kilométrage: ${car.kilometrage} km</li>` : ''}
+              ${car.carburant ? `<li>Carburant: ${car.carburant}</li>` : ''}
+              ${car.transmission ? `<li>Transmission: ${car.transmission}</li>` : ''}
+            </ul>
+          `;
+          
+          carDetailsElement.style.display = 'block';
+          document.getElementById('reservation-form').style.display = 'block';
+          
+        } catch (parseError) {
+          // AJOUT: Gestion spécifique des erreurs de parsing JSON
+          console.error("Erreur lors du parsing JSON:", parseError);
+          console.log("Réponse complète qui a causé l'erreur:", responseText);
+          loadingMessage.style.display = 'none';
+          errorMessage.textContent = 'Format de réponse invalide. La réponse du serveur n\'est pas au format JSON attendu.';
+          errorMessage.style.display = 'block';
+        }
         
       } catch (error) {
-        console.error('Erreur:', error);
+        console.error('Erreur complète:', error);
         loadingMessage.style.display = 'none';
         errorMessage.textContent = 'Erreur lors du chargement des détails de la voiture. Veuillez réessayer plus tard.';
         errorMessage.style.display = 'block';

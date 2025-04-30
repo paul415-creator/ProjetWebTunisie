@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const carRoutes = require('./routes/vehicules'); // Nouvelle importation pour les voitures 
+const reservationRoutes = require('./routes/reservationCar');
 
 
 // Middleware
@@ -30,6 +31,9 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);  // Toutes les routes d'auth commenceront par /api/auth
 app.use('/api/users', userRoutes); // Toutes les routes d'utilisateurs commenceront par /api/users
 app.use('/api/cars', carRoutes); // Nouvelle route pour les voitures 
+app.use('/api/users', userRoutes);
+app.use('/api/reservations', reservationRoutes);
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

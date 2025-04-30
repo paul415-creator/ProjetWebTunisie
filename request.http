@@ -10,10 +10,26 @@ Content-Type: application/json
   "email": "Paul@mail.com",
   "password": "123456"
 }
+
+### Login utilisateur
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "raph@gmail.com",
+  "password": "123"
+}
+
+
+
 //
 ### DELETE a user
-DELETE http://localhost:3000/users/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzMwODI2NTU5fQ.U4b3KbZVxUx5YCvH5otB6ILYYdimspDHptHRzVnPJlQ
+DELETE http://localhost:3000/api/users/68110ead16534165a45ea1fc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs
+
+
+
+
 
 
 
@@ -25,14 +41,28 @@ GET http://localhost:3000/api/cars/available
 POST http://localhost:3000/api/cars
 Content-Type: application/json
 
-{
-    "marque": "BMW",
-    "modele": "A3",
-    "annee": 2021,
-    "prix": 26500,
-    "disponible": false,
-    "description": "Audi A3 Sportback avec intérieur cuir"
-}
-
+ {
+    "marque": "Renault",
+    "modele": "Megane E-Tech",
+    "annee": 2024,
+    "prix": 36750,
+    "disponible": true,
+    "description": "Renault Megane E-Tech électrique de 2024 en version Iconic, neuve (500 km d'essai), couleur Bleu Nocturne avec toit noir contrasté. Équipée d'une batterie 60 kWh offrant 450 km d'autonomie WLTP et moteur de 220 ch. Dotée du système multimédia OpenR Link avec Google intégré sur écran vertical 12 pouces, système audio Harman Kardon, sellerie en cuir/Alcantara recyclé, pompe à chaleur, charge bidirectionnelle V2G, recharge rapide 130 kW (30 min pour 300 km d'autonomie), 22 aides à la conduite et garantie de 8 ans sur batterie. Premier entretien offert et bonus écologique déjà déduit du prix affiché."
+  }
 ###supprimer une voitures avec l'id 
-DELETE http://localhost:3000/api/cars/6810c32a93cdb506cfe9fb76
+DELETE http://localhost:3000/api/cars/681114977ab7b8bc3b31b02a
+
+
+
+##reserver une voitures 
+### Créer une nouvelle réservation
+POST http://localhost:3000/api/reservations
+Content-Type: application/json
+
+
+{
+  "voiture": "681114977ab7b8bc3b31b02a",
+  "utilisateur": "68110ead16534165a45ea1fc",
+  "dateDebut": "2025-05-01",
+  "dateFin": "2025-05-10"
+}
