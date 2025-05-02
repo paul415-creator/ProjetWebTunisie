@@ -1,6 +1,15 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+// importation de la bibliothèque dotenv
+
+
 dotenv.config();
+// cette ligne la lit le fichier .env situé à la racine de votre projet et 
+// charge les variables qui y sont définies dans process.env.
+
+
+// dotenv est un module Node.js qui permet de charger des variables d'environnement 
+// à partir d'un fichier .env 
 
 // Idéalement, cette clé secrète devrait être dans votre fichier .env
 // Vous pourriez la récupérer avec: const JWT_SECRET = process.env.JWT_SECRET;

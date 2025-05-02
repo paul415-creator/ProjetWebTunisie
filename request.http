@@ -42,13 +42,13 @@ POST http://localhost:3000/api/cars
 Content-Type: application/json
 
  {
-    "marque": "Renault",
-    "modele": "Megane E-Tech",
-    "annee": 2024,
-    "prix": 36750,
+    "marque": "Peugeot",
+    "modele": "e-208",
+    "annee": 2025,
+    "prix": 36990,
     "disponible": true,
-    "description": "Renault Megane E-Tech électrique de 2024 en version Iconic, neuve (500 km d'essai), couleur Bleu Nocturne avec toit noir contrasté. Équipée d'une batterie 60 kWh offrant 450 km d'autonomie WLTP et moteur de 220 ch. Dotée du système multimédia OpenR Link avec Google intégré sur écran vertical 12 pouces, système audio Harman Kardon, sellerie en cuir/Alcantara recyclé, pompe à chaleur, charge bidirectionnelle V2G, recharge rapide 130 kW (30 min pour 300 km d'autonomie), 22 aides à la conduite et garantie de 8 ans sur batterie. Premier entretien offert et bonus écologique déjà déduit du prix affiché."
-  }
+    "description": "Peugeot e-208 de 2025 en version GT, neuve (400 km d'essai), couleur Jaune Elixir avec toit noir. Équipée d'un moteur électrique de 156 ch. Dotée du système i-Cockpit 3D avec écran tactile 10 pouces, navigation connectée, sellerie Alcantara/tissu, recharge rapide jusqu'à 100 kW, autonomie de 400 km WLTP, conduite semi-autonome niveau 2, et garantie de 8 ans sur batterie. Wallbox offerte et 3 ans d'entretien inclus dans le prix affiché."
+}
 ###supprimer une voitures avec l'id 
 DELETE http://localhost:3000/api/cars/681114977ab7b8bc3b31b02a
 
