@@ -46,7 +46,11 @@ router.get('/user', auth, async (req, res) => {
       const { voiture, dateDebut, dateFin } = req.body;
       
       // Récupérer l'ID de l'utilisateur depuis le token
-      const userId = req.user.id;
+
+
+      //C'est une erreur courante avec MongoDB, car les documents MongoDB
+      //  utilisent _id et non id comme identifiant par défaut.
+      const userId = req.user._id;
       
       // Validation de base
       if (!voiture || !dateDebut || !dateFin) {

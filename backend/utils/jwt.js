@@ -1,8 +1,17 @@
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Idéalement, cette clé secrète devrait être dans votre fichier .env
 // Vous pourriez la récupérer avec: const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_SECRET = 'votre_clé_secrète_très_complexe_à_changer_en_production';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+
+//avant j'utilisé une clé secrète en dur : 
+// Alors que dans mon  middleware d'authentification vous utilisez la variable d'environnement 
+//"const decoded = jwt.verify(token, process.env.JWT_SECRET);"
+// En effet, votre middleware essaie de vérifier un token qui a été signé avec une autre clé. 
+
 
 /**
  * Génère un JWT token pour l'authentification

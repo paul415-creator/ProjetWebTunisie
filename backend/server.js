@@ -4,6 +4,12 @@ const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 dotenv.config();
+
+
+console.log("JWT_SECRET défini:", process.env.JWT_SECRET ? "Oui" : "Non");
+console.log("MONGODB_URI défini:", process.env.MONGODB_URI ? "Oui" : "Non");
+
+
 connectDB();
 const app = express();
 // Utiliser la variable d'environnement pour le port ou 3000 par défaut

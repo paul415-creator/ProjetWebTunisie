@@ -212,13 +212,19 @@
             dateFin: dateFin
           })
         });
+
+        console.log("Statut de la réponse:", response.status);
         
+        // Lire le corps de la réponse UNE SEULE FOIS
+        const data = await response.json();
+        console.log("Réponse complète:", data);
+
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || 'Erreur lors de la réservation');
+          throw new Error(data.message || data.error || 'Erreur lors de la réservation');
         }
         
-        const reservation = await response.json();
+        // Utiliser 'data' qui contient déjà le résultat de response.json()
+        const reservation = data;
         
         // Afficher le message de succès
         errorMessage.style.display = 'none';
