@@ -2,6 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const { calculateRentalPrice } = require('../utils/calculator');
+const Reservation = require('../models/reservCars');
+const Vehicule = require('../models/vehicule');
+
+
 
 
 
@@ -38,18 +43,19 @@ router.get('/user', auth, async (req, res) => {
     }
   });
 
+
+
+// cette route : Importe la fonction de calcul de prix
+//Récupère les informations du véhicule avec son prix
+//Calcule automatiquement le prix total
+//Enregistre ces informations dans la réservation
+
+
   router.post('/', auth, async (req, res) => {
     try {
       console.log("Tentative de création de réservation:", req.body);
       
-      // Récupérer les données de la réservation
       const { voiture, dateDebut, dateFin } = req.body;
-      
-      // Récupérer l'ID de l'utilisateur depuis le token
-
-
-      //C'est une erreur courante avec MongoDB, car les documents MongoDB
-      //  utilisent _id et non id comme identifiant par défaut.
       const userId = req.user._id;
       
       // Validation de base
@@ -57,32 +63,104 @@ router.get('/user', auth, async (req, res) => {
         return res.status(400).json({ message: 'Veuillez fournir toutes les informations requises' });
       }
       
-      // Créer un objet réservation (à adapter selon votre modèle)
-      const newReservation = {
-        _id: "reservation_" + Date.now(), // Générer un ID temporaire
-        voiture: voiture,
+      // Vérifier les dates
+      if (new Date(dateDebut) >= new Date(dateFin)) {
+        return res.status(400).json({ message: 'La date de fin doit être après la date de début' });
+      }
+      
+      // Récupérer les informations de la voiture
+      const vehicule = await Vehicule.findById(voiture);
+      if (!vehicule) {
+        return res.status(404).json({ message: 'Véhicule non trouvé' });
+      }
+      
+      // Calculer le prix
+      const priceDetails = calculateRentalPrice(vehicule.prix, dateDebut, dateFin);
+      
+      // Créer la réservation avec les informations de prix
+      const reservation = new Reservation({
+        voiture,
         utilisateur: userId,
-        dateDebut: dateDebut,
-        dateFin: dateFin,
-        statut: "confirmée",
+        dateDebut,
+        dateFin,
+        prixJournalier: priceDetails.pricePerDay,
+        nombreJours: priceDetails.numberOfDays,
+        prixTotal: priceDetails.totalPrice,
+        statut: 'confirmée',
         dateCreation: new Date()
-      };
+      });
       
-      // Si vous avez un modèle Mongoose, vous utiliserez quelque chose comme :
-      // const reservation = new Reservation(newReservation);
-      // await reservation.save();
+      await reservation.save();
       
-      // Pour le moment, nous simulons une création réussie
-      console.log("Réservation créée avec succès:", newReservation);
-      
-      // Renvoyer la réservation créée
-      res.status(201).json(newReservation);
+      // Renvoyer la réservation avec les détails de prix
+      res.status(201).json({
+        message: 'Réservation créée avec succès',
+        reservation: reservation,
+        priceDetails: priceDetails
+      });
       
     } catch (error) {
       console.error("Erreur lors de la création de la réservation:", error);
       res.status(500).json({ message: 'Erreur serveur lors de la création de la réservation' });
     }
   });
+
+
+
+  // Ajoutez cette route dans routes/reservationCar.js
+  //Cette route permet aux utilisateurs d'obtenir une estimation du prix sans créer de réservation.
+
+    router.post('/calculate-price', auth, async (req, res) => {
+      try {
+        const { voiture, dateDebut, dateFin } = req.body;
+        
+        // Validation
+        if (!voiture || !dateDebut || !dateFin) {
+          return res.status(400).json({ 
+            message: 'Veuillez fournir l\'ID du véhicule et les dates' 
+          });
+        }
+        
+        // Vérifier si les dates sont valides
+        if (new Date(dateDebut) >= new Date(dateFin)) {
+          return res.status(400).json({ 
+            message: 'La date de fin doit être après la date de début' 
+          });
+        }
+        
+        // Récupérer le véhicule
+        const vehicule = await Vehicule.findById(voiture);
+        if (!vehicule) {
+          return res.status(404).json({ message: 'Véhicule non trouvé' });
+        }
+        
+        // Calculer le prix
+        const priceDetails = calculateRentalPrice(vehicule.prix, dateDebut, dateFin);
+        
+        // Renvoyer les détails
+        res.json({
+          vehicule: {
+            id: vehicule._id,
+            marque: vehicule.marque,
+            modele: vehicule.modele,
+            prixJournalier: vehicule.prix
+          },
+          priceDetails: {
+            numberOfDays: priceDetails.numberOfDays,
+            pricePerDay: priceDetails.pricePerDay,
+            totalPrice: priceDetails.totalPrice
+          }
+        });
+        
+      } catch (error) {
+        console.error("Erreur lors du calcul du prix:", error);
+        res.status(500).json({ 
+          message: 'Erreur serveur lors du calcul du prix' 
+        });
+      }
+    });
+
+
 
   
 // GET - Obtenir une réservation par ID

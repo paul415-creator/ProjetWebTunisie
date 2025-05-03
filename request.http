@@ -40,15 +40,15 @@ GET http://localhost:3000/api/cars/available
 #####
 POST http://localhost:3000/api/cars
 Content-Type: application/json
-
- {
-    "marque": "Peugeot",
-    "modele": "e-208",
+ 
+  {
+    "marque": "FORD",
+    "modele": "Escape",
     "annee": 2025,
-    "prix": 36990,
+    "prix": 84,
     "disponible": true,
-    "description": "Peugeot e-208 de 2025 en version GT, neuve (400 km d'essai), couleur Jaune Elixir avec toit noir. Équipée d'un moteur électrique de 156 ch. Dotée du système i-Cockpit 3D avec écran tactile 10 pouces, navigation connectée, sellerie Alcantara/tissu, recharge rapide jusqu'à 100 kW, autonomie de 400 km WLTP, conduite semi-autonome niveau 2, et garantie de 8 ans sur batterie. Wallbox offerte et 3 ans d'entretien inclus dans le prix affiché."
-}
+    "description": "Compact SUV sportif avec SYNC 4, Co-Pilot360 et motorisation EcoBoost turbo performante"
+  }
 ###supprimer une voitures avec l'id 
 DELETE http://localhost:3000/api/cars/681114977ab7b8bc3b31b02a
 

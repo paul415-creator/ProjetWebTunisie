@@ -25,23 +25,32 @@
     <div id="car-details" style="display: none;">
       <!-- Les détails de la voiture seront injectés ici par JavaScript -->
     </div>
-    
-    <div id="reservation-form" style="display: none;">
-      <h3>Réserver cette voiture</h3>
-      <form id="booking-form">
-        <div>
-          <label for="date-debut">Date de début:</label>
-          <input type="date" id="date-debut" name="date-debut" required>
-        </div>
-        <div>
-          <label for="date-fin">Date de fin:</label>
-          <input type="date" id="date-fin" name="date-fin" required>
-        </div>
-        <div>
-          <button type="submit">Confirmer la réservation</button>
-        </div>
-      </form>
+    <!-- Modifiez la section du formulaire dans reservecar.html -->
+<div id="reservation-form" style="display: none;">
+  <h3>Réserver cette voiture</h3>
+  <form id="booking-form">
+    <div>
+      <label for="date-debut">Date de début:</label>
+      <input type="date" id="date-debut" name="date-debut" required>
     </div>
+    <div>
+      <label for="date-fin">Date de fin:</label>
+      <input type="date" id="date-fin" name="date-fin" required>
+    </div>
+    
+    <!-- Nouvelle section pour afficher le prix calculé -->
+    <div id="price-calculation" style="display: none; margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+      <h4>Détails du prix:</h4>
+      <p>Nombre de jours: <span id="rental-days"></span></p>
+      <p>Prix par jour: <span id="price-per-day"></span> DT</p>
+      <p><strong>Prix total: <span id="total-price"></span> DT</strong></p>
+    </div>
+    
+    <div>
+      <button type="submit">Confirmer la réservation</button>
+    </div>
+  </form>
+</div>
     
     <div id="error-message" style="display: none; color: red;">
       <!-- Messages d'erreur éventuels -->
@@ -139,7 +148,7 @@
           // Afficher les détails de la voiture
           carDetailsElement.innerHTML = `
             <h2>${car.marque} ${car.modele} (${car.annee})</h2>
-            <p><strong>Prix:</strong> ${car.prix} €</p>
+            <p><strong>Prix:</strong> ${car.prix} DT/jour</p>
             <p><strong>Description:</strong> ${car.description || 'Aucune description disponible.'}</p>
             <p><strong>Caractéristiques:</strong></p>
             <ul>
@@ -169,6 +178,71 @@
         errorMessage.style.display = 'block';
       }
     }
+
+
+
+    // Ajoutez ce code juste après la fonction loadCarDetails()
+
+      // Fonction pour calculer et afficher le prix
+      async function calculateAndDisplayPrice() {
+        const dateDebut = document.getElementById('date-debut').value;
+        const dateFin = document.getElementById('date-fin').value;
+        const carId = getCarIdFromUrl();
+        
+        // Vérifier si les deux dates sont sélectionnées
+        if (!dateDebut || !dateFin) {
+          document.getElementById('price-calculation').style.display = 'none';
+          return;
+        }
+        
+        // Vérifier si la date de fin est après la date de début
+        if (new Date(dateDebut) >= new Date(dateFin)) {
+          document.getElementById('price-calculation').style.display = 'none';
+          return;
+        }
+        
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('http://localhost:3000/api/reservations/calculate-price', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              voiture: carId,
+              dateDebut: dateDebut,
+              dateFin: dateFin
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Afficher les informations de prix
+            document.getElementById('rental-days').textContent = data.priceDetails.numberOfDays;
+            document.getElementById('price-per-day').textContent = data.priceDetails.pricePerDay;
+            document.getElementById('total-price').textContent = data.priceDetails.totalPrice;
+            
+            // Rendre la section visible
+            document.getElementById('price-calculation').style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Erreur lors du calcul du prix:', error);
+        }
+      }
+
+      // Et ajoutez ceci dans la fonction DOMContentLoaded, après loadCarDetails():
+
+      document.addEventListener('DOMContentLoaded', function() {
+        if (checkAuthentication()) {
+          loadCarDetails();
+          
+          // Ajouter des écouteurs d'événements pour les champs de date
+          document.getElementById('date-debut').addEventListener('change', calculateAndDisplayPrice);
+          document.getElementById('date-fin').addEventListener('change', calculateAndDisplayPrice);
+        }
+      });
     
     // Gérer la soumission du formulaire de réservation
     document.getElementById('booking-form').addEventListener('submit', async function(e) {
