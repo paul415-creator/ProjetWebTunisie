@@ -8,24 +8,21 @@ const Vehicule = require('../models/vehicule');
 
 // Route pour récupérer les réservations de l'utilisateur
 router.get('/user', auth, async (req, res) => {
-    try {
-      // Récupérer l'ID de l'utilisateur depuis le token
+  try {
       const userId = req.user.id;
       
-      console.log("Recherche des réservations pour l'utilisateur:", userId);
+      // Ne récupérer que les réservations qui ne sont pas annulées
+      const reservations = await Reservation.find({ 
+          utilisateur: userId,
+          statut: { $ne: 'annulée' } // $ne signifie "not equal"
+      });
       
-      // Récupérer les VRAIES réservations de l'utilisateur depuis la base de données
-      const reservations = await Reservation.find({ utilisateur: userId });
-      
-      console.log("Réservations trouvées:", reservations);
-      
-      // Renvoyer le tableau directement
       res.json(reservations);
       
-    } catch (error) {
+  } catch (error) {
       console.error("Erreur:", error);
       res.status(500).json({ message: 'Erreur serveur' });
-    }
+  }
 });
 
 // Route pour créer une nouvelle réservation
@@ -138,6 +135,54 @@ router.post('/calculate-price', auth, async (req, res) => {
       });
     }
 });
+
+
+
+
+
+        // Route pour annuler une réservation
+    router.put('/:id/cancel', auth, async (req, res) => {
+      try {
+          const reservationId = req.params.id;
+          const userId = req.user._id; // ID de l'utilisateur connecté
+
+          // 1. Trouver la réservation
+          const reservation = await Reservation.findById(reservationId);
+
+          // 2. Vérifier si la réservation existe
+          if (!reservation) {
+              return res.status(404).json({ message: 'Réservation non trouvée' });
+          }
+
+          // 3. Vérifier si l'utilisateur est le propriétaire de la réservation
+          if (reservation.utilisateur.toString() !== userId.toString()) {
+              return res.status(403).json({ message: 'Vous n\'êtes pas autorisé à annuler cette réservation' });
+          }
+
+          // 4. Vérifier si la réservation peut être annulée
+          if (reservation.statut === 'annulée') {
+              return res.status(400).json({ message: 'Cette réservation est déjà annulée' });
+          }
+
+          // 5. Vérifier si ce n'est pas trop tard pour annuler (optionnel)
+          const today = new Date();
+          const debutReservation = new Date(reservation.dateDebut);
+          
+          // 6. Mettre à jour le statut
+          reservation.statut = 'annulée';
+          await reservation.save();
+
+          // 7. Renvoyer la réponse
+          res.json({ 
+              message: 'Réservation annulée avec succès',
+              reservation: reservation
+          });
+
+      } catch (error) {
+          console.error('Erreur lors de l\'annulation:', error);
+          res.status(500).json({ message: 'Erreur serveur lors de l\'annulation' });
+      }
+    });
 
 // GET - Obtenir une réservation par ID
 router.get('/:id', (req, res) => {
