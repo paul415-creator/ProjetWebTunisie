@@ -20,16 +20,10 @@ Content-Type: application/json
   "password": "123"
 }
 
-
-
 //
 ### DELETE a user
 DELETE http://localhost:3000/api/users/68110ead16534165a45ea1fc
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs
-
-
-
-
 
 
 
@@ -53,12 +47,10 @@ Content-Type: application/json
 DELETE http://localhost:3000/api/cars/681114977ab7b8bc3b31b02a
 
 
-
 ##reserver une voitures 
 ### Créer une nouvelle réservation
 POST http://localhost:3000/api/reservations
 Content-Type: application/json
-
 
 {
   "voiture": "681114977ab7b8bc3b31b02a",
