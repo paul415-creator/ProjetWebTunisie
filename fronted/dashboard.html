@@ -124,6 +124,10 @@
         for (const reservation of reservations) {
             try {
                 console.log("Traitement de la réservation:", reservation);
+                console.log("ID de la voiture dans la réservation:", reservation.voiture);
+                console.log("Type de l'ID:", typeof reservation.voiture);
+                console.log("URL qui sera appelée:", `http://localhost:3000/api/cars/${reservation.voiture}`);
+        
                 
                 if (!reservation.voiture) {
                     console.error("La réservation n'a pas d'ID de voiture:", reservation);
@@ -135,6 +139,8 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log("Réponse du serveur - status:", carResponse.status);
+
                 
                 if (!carResponse.ok) {
                     throw new Error(`Erreur lors du chargement des détails de la voiture ${reservation.voiture}`);

@@ -30,6 +30,9 @@ router.get('/available', async (req, res) => {
 // Route pour obtenir les détails d'une voiture spécifique
 router.get('/:id', async (req, res) => {
     try {
+
+      console.log("Requête reçue pour voiture ID:", req.params.id);
+      console.log("Type de l'ID reçu:", typeof req.params.id);
       const car = await Vehicule.findById(req.params.id);
       
       if (!car) {
