@@ -35,14 +35,15 @@ GET http://localhost:3000/api/cars/available
 POST http://localhost:3000/api/cars
 Content-Type: application/json
  
-  {
-    "marque": "FORD",
-    "modele": "Escape",
-    "annee": 2025,
-    "prix": 84,
-    "disponible": true,
-    "description": "Compact SUV sportif avec SYNC 4, Co-Pilot360 et motorisation EcoBoost turbo performante"
-  }
+ {
+  "marque": "JEEP",
+  "modele": "Cherokee",
+  "annee": 2025,
+  "prix": 86,
+  "disponible": true,
+  "description": "SUV tout-terrain avec système 4x4 Jeep Active Drive, Uconnect 6 et capacités Trail Rated"
+}
+
 ###supprimer une voitures avec l'id 
 DELETE http://localhost:3000/api/cars/681114977ab7b8bc3b31b02a
 

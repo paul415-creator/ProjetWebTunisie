@@ -1,0 +1,255 @@
+/* dashboard.css - Styles pour le tableau de bord */
+
+/* Reset et styles de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    padding: 20px;
+}
+
+/* En-tête principal */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Section de bienvenue */
+#welcome-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+#user-name {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* Boutons */
+button {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px 5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+#toggle-info {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+#toggle-info:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Container des informations */
+#info-container {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+h3 {
+    color: #374151;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Informations utilisateur */
+#info-container p {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+}
+
+#info-container strong {
+    color: #4b5563;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+/* Section documents */
+#info-container > div {
+    margin-top: 30px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f9fafb;
+}
+
+h4 {
+    color: #374151;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+/* Zone de téléchargement */
+.upload-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background: white;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.upload-zone:hover {
+    border-color: #3b82f6;
+    background: #f8faff;
+}
+
+.upload-zone p {
+    margin: 5px 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.upload-filename {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #10b981;
+    font-weight: 500;
+}
+
+/* Section réservations */
+#reservations-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+#reservations-loading, #no-reservations {
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.05rem;
+    padding: 20px;
+}
+
+/* Cartes de réservation */
+#reservations-container > div {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+#reservations-container > div:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#reservations-container h4 {
+    color: #1f2937;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+#reservations-container p {
+    margin-bottom: 8px;
+    color: #4b5563;
+}
+
+#reservations-container strong {
+    color: #374151;
+    font-weight: 600;
+}
+
+/* Bouton annuler */
+button[onclick^="annulerReservation"] {
+    background-color: #ef4444;
+    margin-top: 15px;
+}
+
+button[onclick^="annulerReservation"]:hover {
+    background-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+    
+    #info-container, #reservations-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    button {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .upload-zone {
+        padding: 15px;
+    }
+}

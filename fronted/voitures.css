@@ -1,0 +1,294 @@
+/* voitures.css - Styles pour la page des voitures disponibles */
+
+/* Reset et styles de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+}
+
+/* En-tête */
+header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+/* Navigation */
+nav {
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav a {
+    color: #3b82f6;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+#username-display {
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* Section principale */
+main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Message de chargement */
+#loading-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6b7280;
+    margin: 40px 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Liste des voitures */
+#car-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+/* Carte de voiture */
+#car-list > div {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#car-list > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+#car-list h3 {
+    color: #1f2937;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+#car-list p {
+    margin-bottom: 10px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+#car-list p strong {
+    color: #374151;
+    font-weight: 600;
+}
+
+/* Bouton de réservation */
+.reserve-button {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.reserve-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.reserve-button:active {
+    transform: translateY(0);
+}
+
+/* Popup de connexion */
+#login-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Overlay pour le popup */
+#login-popup::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+#login-popup h3 {
+    color: #1f2937;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+#login-popup p {
+    color: #4b5563;
+    margin-bottom: 25px;
+}
+
+#login-popup div {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+#login-popup button {
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+#login-redirect {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+#login-redirect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+#close-popup {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+
+#close-popup:hover {
+    background: #d1d5db;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    nav {
+        padding: 10px 20px;
+    }
+    
+    nav a {
+        margin: 0 10px;
+        font-size: 0.95rem;
+    }
+    
+    #car-list {
+        grid-template-columns: 1fr;
+    }
+    
+    main {
+        margin: 20px auto;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    nav a {
+        display: block;
+        margin: 10px 0;
+    }
+    
+    #car-list > div {
+        padding: 20px;
+    }
+    
+    #login-popup {
+        padding: 20px;
+    }
+    
+    #login-popup div {
+        flex-direction: column;
+    }
+    
+    #login-popup button {
+        width: 100%;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#car-list > div {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Délai d'animation pour chaque carte */
+#car-list > div:nth-child(1) { animation-delay: 0.1s; }
+#car-list > div:nth-child(2) { animation-delay: 0.2s; }
+#car-list > div:nth-child(3) { animation-delay: 0.3s; }
+#car-list > div:nth-child(4) { animation-delay: 0.4s; }
+#car-list > div:nth-child(5) { animation-delay: 0.5s; }
+#car-list > div:nth-child(6) { animation-delay: 0.6s; }
+
+/* Séparateur horizontal */
+hr {
+    display: none; /* Masqué car nous utilisons les cartes */
+}
